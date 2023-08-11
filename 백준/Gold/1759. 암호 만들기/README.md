@@ -26,3 +26,139 @@
 
  <p>각 줄에 하나씩, 사전식으로 가능성 있는 암호를 모두 출력한다.</p>
 
+### 문제풀이
+ - 해당 문제의 경우 C개의 문자를 이용하여 L 크기의 암호문을 만드는 문제로 조합 문제였습니다.
+ - 여기서 주의할 점은 암호문의 조건입니다. (설명 잘 읽어야함..)
+   1. 암호문에는 `최소 1개`의 모음(a, e, i, o, u)이 있어야 한다.
+   2. 암호문에는 `최소 2개`의 자음이 있어야 한다.
+  - 따라서 C개의 문자를 이용한 L 크기의 암호문의 조합들을 구한 후에 마지막으로 조건처리를 하여 풀이하면 되겠습니다.
+
+### Next Permutation 풀이
+![image](https://github.com/zsa332/Algorithms/assets/78728865/e97a2dc0-ff4a-4ba1-a00c-f7f8642c888c)
+___Main___
+```java
+public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st = new StringTokenizer(br.readLine());
+
+    L = Integer.parseInt(st.nextToken()); // 암호문의 크기
+    C = Integer.parseInt(st.nextToken()); // 주어진 문자의 갯수
+
+    String str = br.readLine().replace(" ", "");
+    chars = str.toCharArray(); // 문자를 저장할 배열
+
+    Arrays.sort(chars); // 생략가능
+    
+    int[] mask = new int[C]; // 조합을 생성할 때 사용할 배열
+    for(int i = C - L; i < C; i++) { // 암호문의 크기만큼 배열의 뒷부분 값입력
+     mask[i] = 1;
+    }
+    
+    List<String> list = new ArrayList<String>(); // 암호문을 담을 리스트
+    do{
+     String line = "";
+     int v = 0, c = 0; // 모음, 자음의 갯수
+     for(int i = 0; i < C; i++) {
+      if(mask[i] == 1) {
+       line += chars[i];
+       if(chars[i] == 'a' || chars[i] == 'e'||chars[i] == 'i' || chars[i] == 'o' || chars[i] == 'u')
+        v++; // 모음 카운트
+       else c++; // 자음 카운트
+      }
+     }
+     if(v >= 1 && c >= 2) // 모음이 1개 이상이며 자음이 2개 이상일 경우만 암호문 추가
+      list.add(line);
+    }while(np(mask));
+    
+    Collections.sort(list); // 사전순으로 출력하기 위해 정렬
+    
+    for(String s : list) { // 암호문 출력
+     System.out.println(s);
+    }
+}
+```
+___Next Permutation___
+```java
+private static boolean np(int[] p) {
+ // 1. 꼭지점을 탐색
+ int N = p.length;
+ int i = N - 1;
+ while (i > 0 && p[i - 1] >= p[i])
+  i--;
+
+ if (i == 0)
+  return false; // 꼭지점이 첫번째인 경우 더이상의 경우의 수 없음
+
+ // 2. 꼭지점전 값과 바꿀 한단계 높은 값을 탐색
+ int j = N - 1;
+ while (p[i - 1] >= p[j])
+  j--;
+
+ // 3. 교체
+ swap(p, i - 1, j);
+
+ // 4. 꼭지점 이후의 값을 오름차순 정렬
+ int k = N - 1;
+ while (i < k) {
+  swap(p, i++, k--);
+ }
+
+ return true;
+}
+
+private static void swap(int[] mask, int i, int j) {
+ int temp = mask[i];
+ mask[i] = mask[j];
+ mask[j] = temp;
+}
+```
+
+### BackTracking 풀이
+![image](https://github.com/zsa332/Algorithms/assets/78728865/a100fd02-a5cd-4217-8dfa-afdd011e3114)
+___Main___
+```java
+public static void main(String[] args) throws IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    StringTokenizer st = new StringTokenizer(br.readLine());
+
+    L = Integer.parseInt(st.nextToken()); // 암호문의 크기
+    C = Integer.parseInt(st.nextToken()); // 주어진 문자의 갯수
+
+    String str = br.readLine().replace(" ", "");
+    chars = str.toCharArray(); // 문자를 저장할 배열
+
+    Arrays.sort(chars); // 사전순으로 출력하기 위해 정렬
+
+    combination(0, 0, 0, "");
+}
+
+   
+```
+___Combination___
+```java
+/**
+* 암호문의 조합을 구하고 조건 확인후 출력하는 함수
+* @param start : 시작 인덱스
+* @param cnt : 사용된 문자의 수
+* @param flag : 사용여부를 확인할 변수 
+* @param password : 현재까지 완성된 암호문
+*/
+private static void combination(int start , int cnt, int flag, String password){
+ if(cnt == L){
+     int vowel = 0, consonant = 0; // 모음과 자음의 개수
+     for(int i = 0; i < password.length(); i++){
+         if(password.charAt(i) =='a' || password.charAt(i) =='e' || password.charAt(i) =='i'
+                 || password.charAt(i) =='o' || password.charAt(i) =='u')vowel++; // 모음 카운트
+         else consonant++; // 자음 카운트
+     }
+     if(vowel >= 1 && consonant >= 2) // 모음이 1개 이상이며 자음이 2개 이상일 경우만 출력
+         System.out.println(password); 
+     return;
+ }
+
+ for(int i = start; i < C; i++){
+     if((flag & 1 << i) != 0) continue; // 사용된 문자라면 넘어가기
+     combination(i+1, cnt+1, flag | 1 << i, password + chars[i]); // 다음 문자를 받기위해 재귀
+ }
+}
+```
