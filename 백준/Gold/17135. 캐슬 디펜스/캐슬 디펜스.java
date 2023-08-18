@@ -50,7 +50,7 @@ public class Main {
 			}
 			// 시뮬레이션
 			simulation();
-
+			if(ans == enemys.size())break;
 		}while(np(acher));
 		
 		System.out.println(ans);
