@@ -1,27 +1,25 @@
 import java.util.Scanner;
 
 public class Main {
-	static int answer;
+	static int answer, dp[];
+
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		int n = sc.nextInt();
-		
-		answer = Integer.MAX_VALUE;
-		recursive(n, 0);
-		System.out.println(answer);
-	}
-
-	private static void recursive(int n, int cnt) {
-		if(cnt > answer || n < 1) {
-			return;
+		if(n == 1)System.out.println(0);
+		else if(n <= 3)
+			System.out.println(1);
+		else {
+			dp = new int[n + 1];
+			dp[1] = 1;
+			dp[2] = 1;
+			dp[3] = 1;
+			for (int i = 4; i <= n; i++) {
+				dp[i] = dp[i-1] + 1;
+				if(i % 2 == 0)dp[i] = Math.min(dp[i], dp[i/2] + 1);
+				if(i % 3 == 0)dp[i] = Math.min(dp[i], dp[i/3] + 1);
+			}
+			System.out.println(dp[n]);
 		}
-		if(n == 1) {
-			answer = Math.min(answer, cnt);
-			return;
-		}
-		if(n % 3 == 0)recursive(n/3, cnt+1);
-		if(n % 2 == 0)recursive(n/2, cnt+1);
-		recursive(n-1, cnt+1);
 	}
-
 }
