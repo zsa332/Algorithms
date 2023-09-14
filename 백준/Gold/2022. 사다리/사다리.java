@@ -21,6 +21,6 @@ public class Main {
             if (res >= c) left = mid;
             else right = mid;
         }
-		System.out.println(String.format("%.3f", right));
+		System.out.printf("%.3f", right);
 	}
 }
