@@ -4,6 +4,7 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Solution {
+
 	public static void main(String[] args) throws IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st;
@@ -12,28 +13,28 @@ public class Solution {
 		for(int tc = 1; tc <= T; tc++) {
 			st = new StringTokenizer(br.readLine());
 			int N = Integer.parseInt(st.nextToken());
-			int[][] dp = new int[N][N];
+			int[][] distance = new int[N][N];
 			
 			for(int i = 0; i < N; i++) {
 				for(int j = 0; j < N; j++) {
 					int dist = Integer.parseInt(st.nextToken());
-					if(i == j)dp[i][j] = 0;
-					else if(dist == 0)dp[i][j] = Integer.MAX_VALUE;
-					else dp[i][j] = dist;
+					if(i == j)distance[i][j] = 0;
+					else if(dist == 0)distance[i][j] = Integer.MAX_VALUE;
+					else distance[i][j] = dist;
 				}
 			}
 			
 			for(int k = 0; k < N; k++) {
 				for(int i = 0; i < N; i++) {
 					for(int j = 0; j < N; j++) {
-						if(dp[i][k] != Integer.MAX_VALUE && dp[k][j] != Integer.MAX_VALUE)
-							dp[i][j] = Math.min(dp[i][j], dp[i][k]+dp[k][j]);
+						if(distance[i][k] != Integer.MAX_VALUE && distance[k][j] != Integer.MAX_VALUE)
+							distance[i][j] = Math.min(distance[i][j], distance[i][k]+distance[k][j]);
 					}
 				}
 			}
 			
 			int answer = Integer.MAX_VALUE;
-			for(int[] row : dp) {
+			for(int[] row : distance) {
 				int rowSum = 0;
 				for(int num : row) {
 					rowSum += num;
