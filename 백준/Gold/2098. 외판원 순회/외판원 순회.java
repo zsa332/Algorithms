@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Main {
-	static int N, INF = 16 * 1_000_000;
+	static int N, INF = 987654321;
 	static int[][] W, dp;
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -52,5 +52,4 @@ public class Main {
 		
 		return dp[cur][flag];
 	}
-
 }
