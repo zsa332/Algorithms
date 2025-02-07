@@ -24,20 +24,22 @@ public class Main {
 
         Collections.sort(madalList);
         madalList.get(0).rank = 1;
+        int answerIdx = 0;
 
-        for(int i = 1; i <= madalList.size(); i++){
+        for(int i = 1; i < madalList.size(); i++){
             Madal cur = madalList.get(i);
             Madal prev = madalList.get(i - 1);
-            if(prev.countryCode == K) {
-                System.out.println(prev.rank);
-                break;
+
+            if(cur.countryCode == K){
+                answerIdx = i;
             }
 
-            if(prev.gold == cur.gold && prev.silver == cur.silver && prev.bronze == cur.bronze){
-                madalList.get(i).rank = prev.rank;
-            }
-            else madalList.get(i).rank = i + 1;
+            if(prev.gold == cur.gold && prev.silver == cur.silver && prev.bronze == cur.bronze)
+                cur.rank = prev.rank;
+            else cur.rank = i + 1;
         }
+
+        System.out.println(madalList.get(answerIdx).rank);
     }
 
     static class Madal implements Comparable<Madal>{
