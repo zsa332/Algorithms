@@ -26,15 +26,17 @@ public class Main {
         madalList.get(0).rank = 1;
 
         for(int i = 1; i <= madalList.size(); i++){
-            if(madalList.get(i-1).countryCode == K) {
-                System.out.println(madalList.get(i-1).rank);
+            Madal cur = madalList.get(i);
+            Madal prev = madalList.get(i - 1);
+            if(prev.countryCode == K) {
+                System.out.println(prev.rank);
                 break;
             }
 
-            if(madalList.get(i-1).gold == madalList.get(i).gold && madalList.get(i-1).silver == madalList.get(i).silver && madalList.get(i-1).bronze == madalList.get(i).bronze){
-                madalList.get(i).rank = madalList.get(i - 1).rank;
+            if(prev.gold == cur.gold && prev.silver == cur.silver && prev.bronze == cur.bronze){
+                madalList.get(i).rank = prev.rank;
             }
-            else madalList.get(i).rank = madalList.get(i - 1).rank + 1;
+            else madalList.get(i).rank = i + 1;
         }
     }
 
