@@ -6,4 +6,5 @@ select id as ID,
             then 'MEDIUM' 
         else 'HIGH' 
     end as SIZE
-from ecoli_data;
+from ecoli_data
+order by id asc;
